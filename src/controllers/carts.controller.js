@@ -1,9 +1,9 @@
-const CartDaoMongo = require("../daos/cartDaoMongo.js")
-const cartDao = new CartDaoMongo()
+const CartService = require('../services/cartService.js')
+const cart = new CartService()
 
 const getCarts = async (req, res) => {
     try {
-        await cartDao.getCarts(req, res)
+        await cart.getCarts(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }
@@ -11,7 +11,7 @@ const getCarts = async (req, res) => {
 
 const saveCart = async (req, res) => {    // Esta funcion guarda un carrito nuevo
     try {
-        await cartDao.saveCart(req, res)
+        await cart.saveCart(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }
@@ -19,7 +19,7 @@ const saveCart = async (req, res) => {    // Esta funcion guarda un carrito nuev
 
 const deleteCartById = async (req, res) => {   // Esta funcion elimina un carrito segun su ID
     try { 
-        await cartDao.deleteCartById(req, res)
+        await cart.deleteCartById(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }
@@ -27,7 +27,7 @@ const deleteCartById = async (req, res) => {   // Esta funcion elimina un carrit
 
 const getProductsFromCart = async (req, res) => { // Esta funcion muestra todos los productos de un carrito
     try {
-        await cartDao.getProductsFromCart(req, res)
+        await cart.getProductsFromCart(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }
@@ -35,7 +35,7 @@ const getProductsFromCart = async (req, res) => { // Esta funcion muestra todos 
 
 const saveProductInCartByID = async (req, res) => { // Esta funcion guarda un producto en un carrito
     try {
-        await cartDao.saveProductInCartByID(req, res)
+        await cart.saveProductInCartByID(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }
@@ -43,7 +43,7 @@ const saveProductInCartByID = async (req, res) => { // Esta funcion guarda un pr
 
 const deleteProductFromCartByID = async (req, res) => { // Esta funcion borra un producto de un carrito
     try {
-        await cartDao.deleteProductFromCartByID(req, res)
+        await cart.deleteProductFromCartByID(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }
@@ -51,7 +51,7 @@ const deleteProductFromCartByID = async (req, res) => { // Esta funcion borra un
 
 const byCartByID = async (req, res) => {  // Esta funcion me permite comprar un carrito
     try {
-        await cartDao.buyCart(req, res)
+        await cart.buyCart(req, res)
     } catch (error) {
         console.error(`El error es: ${error}`)
     }

@@ -1,5 +1,10 @@
 const { Router } = require('express')
-const { getProductById, saveProduct, updateProductByID, deleteProductById } = require('../controllers/daoProducts.controller.js')
+const { 
+    getProductById, 
+    saveProduct, 
+    updateProductByID, 
+    deleteProductById 
+} = require('../controllers/products.controller.js')
 
 const productsRouter = Router()
 

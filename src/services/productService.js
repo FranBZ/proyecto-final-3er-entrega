@@ -1,12 +1,12 @@
-const MongoConteiner = require('../conteiners/mongoConteiner.js')
-const { product } = require('../models/Products.js')
+const MongoConteiner = require('../database/mongo.js')
+const { Product } = require('../models/Products.js')
 
 const administrador = true
 
-class ProductDaoMongo extends MongoConteiner {
+class ProductService extends MongoConteiner {
 
     constructor() {
-        super(product)
+        super(Product)
     }
 
     async getProductById(req, res) {  // Esta funcion devuelve un producto segun su ID o devuelve todos
@@ -96,4 +96,4 @@ class ProductDaoMongo extends MongoConteiner {
     }
 }
 
-module.exports = ProductDaoMongo
+module.exports = ProductService

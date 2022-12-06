@@ -32,4 +32,4 @@ const productSchema = new Schema({
     versionKey: false
 })
 
-exports.product = model(productsCollection, productSchema)
+exports.Product = model(productsCollection, productSchema)

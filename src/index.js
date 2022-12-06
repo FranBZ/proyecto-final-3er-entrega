@@ -3,7 +3,7 @@
 +++++++++++++++++++*/
 
 const { app, modo } = require('./app.js')
-const { logger } = require('./config/logger.js')
+const { logger } = require('./config/logger.config.js')
 const cluster = require('cluster')
 const { cpus } = require('os')
 

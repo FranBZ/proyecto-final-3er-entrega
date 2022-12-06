@@ -1,5 +1,5 @@
 const { createTransport } = require('nodemailer')
-const { logger } = require('../config/logger.js')
+const { logger } = require('../config/logger.config.js')
 
 const enviarMail = async (pedido, usuario) => {
     const transporter = createTransport({

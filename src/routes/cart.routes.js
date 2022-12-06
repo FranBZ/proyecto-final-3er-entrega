@@ -1,5 +1,12 @@
 const { Router } = require('express')
-const { saveCart, deleteCartById, getProductsFromCart, saveProductInCartByID, deleteProductFromCartByID, getCarts, byCartByID } = require('../controllers/daoCart.controller.js')
+const { 
+    saveCart, 
+    deleteCartById, 
+    getProductsFromCart, 
+    saveProductInCartByID, 
+    deleteProductFromCartByID, 
+    getCarts, byCartByID 
+} = require('../controllers/carts.controller.js')
 
 const cartRouter = Router()
 
@@ -18,10 +25,10 @@ cartRouter.get('/:id/productos', getProductsFromCart)
 cartRouter.post('/:idCart/productos/:idProd', saveProductInCartByID)
 
 //5. DELETE: '/:id/productos/:id_prod' - Eliminar un producto del carrito por su id de carrito y de producto
-cartRouter.delete('/:id/productos/:id_prod', deleteProductFromCartByID)
+cartRouter.delete('/:id_cart/productos/:id_prod', deleteProductFromCartByID)
 
-//6 GET '/' - Me permite listar todos los carritos
-cartRouter.get('/', getCarts)
+//6 GET '/' - Me permite listar todos los carritos o un carrito por su id
+cartRouter.get('/:id?', getCarts)
 
 //7 POST '/comprar/:id' - Me permite comprar el carrito por su id y guardar la compra en la base de datos
 cartRouter.post('/comprar/:id', byCartByID)

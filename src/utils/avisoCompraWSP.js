@@ -1,5 +1,5 @@
 const twilio = require('twilio')
-const { logger } = require('../config/logger.js')
+const { logger } = require('../config/logger.config.js')
 
 const accountSid = process.env.ACCOUNT_SID
 const authToken = process.env.AUTH_TOKEN

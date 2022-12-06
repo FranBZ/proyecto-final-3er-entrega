@@ -1,24 +1,35 @@
-const MongoConteiner = require("../conteiners/mongoConteiner.js")
-const { cart } = require('../models/Cart.js')
-const { product } = require('../models/Products.js')
-const { compras } = require('../models/Compras.js')
-const ProductDaoMongo = require('./productDaoMongo.js')
-const { userInfo } = require("../controllers/user.controller.js")
+const MongoConteiner = require("../database/mongo.js")
+const { Cart } = require('../models/Cart.js')
+const { Product } = require('../models/Products.js')
+const { Compras } = require('../models/Compras.js')
+const ProductService = require('./productService.js')
+const { userInfo } = require("../controllers/users.controller.js")
 const { enviarMensajeCliente, enviarMensajeAdmin } = require("../utils/avisoCompraWSP.js")
 const { enviarMail } = require("../utils/avisoCompraEmail.js")
 
-const prodCollection = new ProductDaoMongo(product)
+const prodCollection = new ProductService(Product)
 
-class CartDaoMongo extends MongoConteiner {
+class CartService extends MongoConteiner {
 
     constructor() {
-        super(cart)
+        super(Cart)
     }
 
     async getCarts(req, res) {
+        const { id } = req.params
         try {
-            const info = await super.getAll()
-            res.status(200).send(info)
+            if (!id) {
+                const carts = await super.getAll()
+                res.status(200).send(carts)
+            } else {
+                const cart = await super.getById(id)
+                if (cart) {
+                    res.status(200).send(cart)
+                } else {
+                    res.status(400).json({ error: 'producto no encontrado' })
+                }
+            }
+
         } catch (error) {
             res.status(400).json({ error: `${error}` })
         }
@@ -112,7 +123,7 @@ class CartDaoMongo extends MongoConteiner {
                     products: cart[0].products, 
                     userID: cart[0].userID
                 }
-                const compraGuardada = await compras.create(compra)
+                const compraGuardada = await Compras.create(compra)
                 await enviarMensajeAdmin(cart[0].products, usuario)
                 await enviarMail(cart[0].products, usuario)
                 await enviarMensajeCliente(usuario)
@@ -126,4 +137,4 @@ class CartDaoMongo extends MongoConteiner {
     }
 }
 
-module.exports = CartDaoMongo
+module.exports = CartService

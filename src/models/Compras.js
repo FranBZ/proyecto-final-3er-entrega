@@ -16,4 +16,4 @@ const comprasSchema = Schema({
     versionKey: false
 })
 
-exports.compras = model(comprasCollection, comprasSchema)
+exports.Compras = model(comprasCollection, comprasSchema)

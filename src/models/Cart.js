@@ -15,4 +15,4 @@ const cartSchema = Schema({
     versionKey: false
 })
 
-exports.cart = model(cartCollection, cartSchema)
+exports.Cart = model(cartCollection, cartSchema)

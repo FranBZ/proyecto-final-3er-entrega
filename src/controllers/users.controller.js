@@ -1,14 +1,14 @@
 const { User } = require('../models/User.js')
-const { logger } = require('../config/logger.js')
+const { logger } = require('../config/logger.config.js')
 const passport = require('passport')
 const { borrarImagenUsuario } = require('../utils/borrarFotoRegistroError.js')
-require('../config/passport.js')
+require('../config/passport.config.js')
 
 // registrando usuario
 const signup = async (req, res) => {
     const { email, password, nombre, edad, direccion, prefijo, numero, pathFoto } = req.body
     if (!email && !password && !nombre && !edad && !direccion && !numero && !pathFoto && !prefijo) {
-        borrarImagenUsuario(__dirname)
+        borrarImagenUsuario()
         logger.warn(`Error al registrarse`)
         return res.redirect("/api/error-registro")
     }
@@ -259,7 +259,7 @@ const signup = async (req, res) => {
     ]
     
     if (!prefijos.includes(prefijo)) {
-        borrarImagenUsuario(__dirname)
+        borrarImagenUsuario()
         logger.warn(`Error al registrarse`)
         return res.redirect("/api/error-registro")
     }
@@ -267,7 +267,7 @@ const signup = async (req, res) => {
     // Comprobando que no existen el mail
     const userFound = await User.findOne({ email: email })
     if (userFound) {
-        borrarImagenUsuario(__dirname)
+        borrarImagenUsuario()
         logger.error(`Error al registrarse`)
         return res.redirect("/api/error-registro")
     }
@@ -336,11 +336,18 @@ const getUsers = async (req, res) => {
     }
 }
 
+// Redirigir a home
+const home = async (req, res) => {
+    let idSession = await req.session.passport.user
+    let user = await userInfo(idSession)
+    res.render('home', { user })
+}
+
 module.exports = {
     signup,
     getUsers,
     signin,
     logout,
     auth,
-    userInfo
+    home
 }

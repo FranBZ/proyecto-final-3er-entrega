@@ -1,7 +1,7 @@
 const { Router } = require('express')
-const { logout, signin, signup, auth, userInfo } = require('../controllers/user.controller.js')
-const { upload } = require('../utils/multer.config.js')
-const { asignarPathFotoMongo } = require('../utils/asignarPathFotoMongo.js')
+const { logout, signin, signup, auth, home } = require('../controllers/users.controller.js')
+const { upload } = require('../middlewares/multer.config.js')
+const { asignarPathFotoMongo } = require('../middlewares/asignarPathFotoMongo.js')
 
 /*+++++++++++
 + ENRUTADOR +
@@ -9,11 +9,8 @@ const { asignarPathFotoMongo } = require('../utils/asignarPathFotoMongo.js')
 
 const routerSession = Router()
 
-routerSession.get('/home', auth, async (req, res) => {
-    let idSession = await req.session.passport.user
-    let user = await userInfo(idSession)
-    res.render('home', { user })
-})
+// Home
+routerSession.get('/home', auth, home)
 
 // Registro
 routerSession.get('/error-registro', (req, res) => res.render('errorRegistro'))
