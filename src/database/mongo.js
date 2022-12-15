@@ -4,6 +4,7 @@ const { dbsConfig } = require('../config/dbsConnect.js')
 mongoose.connect(dbsConfig.mongodbAtlas.uri, dbsConfig.mongodbAtlas.options)
 
 class MongoConteiner {
+    
     constructor(model) {
         this.collection = model
     }

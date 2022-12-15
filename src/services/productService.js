@@ -5,8 +5,18 @@ const administrador = true
 
 class ProductService extends MongoConteiner {
 
+    static instance
+
     constructor() {
         super(Product)
+    }
+    
+    static getInstance() {
+        if (ProductService.instance) {
+            return ProductService.instance;
+        }
+        ProductService.instance = new ProductService();
+        return ProductService.instance;
     }
 
     async getProductById(req, res) {  // Esta funcion devuelve un producto segun su ID o devuelve todos

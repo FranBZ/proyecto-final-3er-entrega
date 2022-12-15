@@ -1,5 +1,5 @@
 const ProductService = require('../services/productService.js')
-const product = new ProductService()
+const product = ProductService.getInstance()
 
 const getProductById = async (req, res) => {  // Esta funcion devuelve un producto segun su ID
     try {

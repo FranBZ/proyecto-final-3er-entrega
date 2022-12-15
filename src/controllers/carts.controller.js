@@ -1,5 +1,5 @@
 const CartService = require('../services/cartService.js')
-const cart = new CartService()
+const cart = CartService.getInstance()
 
 const getCarts = async (req, res) => {
     try {

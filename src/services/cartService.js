@@ -1,18 +1,27 @@
 const MongoConteiner = require("../database/mongo.js")
 const { Cart } = require('../models/Cart.js')
-const { Product } = require('../models/Products.js')
 const { Compras } = require('../models/Compras.js')
 const ProductService = require('./productService.js')
 const { userInfo } = require("../controllers/users.controller.js")
 const { enviarMensajeCliente, enviarMensajeAdmin } = require("../utils/avisoCompraWSP.js")
 const { enviarMail } = require("../utils/avisoCompraEmail.js")
 
-const prodCollection = new ProductService(Product)
+const prodCollection = ProductService.getInstance()
 
 class CartService extends MongoConteiner {
 
+    static instance
+
     constructor() {
         super(Cart)
+    }
+
+    static getInstance() {
+        if (CartService.instance) {
+            return CartService.instance;
+        }
+        CartService.instance = new CartService();
+        return CartService.instance;
     }
 
     async getCarts(req, res) {
