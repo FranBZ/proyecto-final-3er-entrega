@@ -1,6 +1,5 @@
 const { User } = require('../models/User.js')
 const { logger } = require('../config/logger.config.js')
-const passport = require('passport')
 const { borrarImagenUsuario } = require('../utils/borrarFotoRegistroError.js')
 const MongoConteiner = require('../database/mongo.js')
 require('../config/passport.config.js')
@@ -314,20 +313,12 @@ class UserService extends MongoConteiner {
         }
 
     }
-
-    // Logueando usuario
-    signin () {
-        passport.authenticate('local', {
-            successRedirect: "/api/home",
-            failureRedirect: "/api/error-login",
-        })
-    }
     
     // deslogueando usuario
     async logout (req, res, next) {
         let idSession = await req.session.passport.user
         let userInfo = await super.getById(idSession)
-        let nombre = userInfo.nombre
+        let nombre = userInfo[0].nombre
         await req.logout((err) => {
             if (err) return next(err)
             return res.render("saludo", { nombre })
@@ -368,8 +359,8 @@ class UserService extends MongoConteiner {
     // Redirigir a home
     async home (req, res) {
         let idSession = await req.session.passport.user
-        let user = await this.getUsers(idSession)
-        res.render('home', { user })
+        let user = await super.getById(idSession)
+        res.render('home', { user : user[0] })
     }
 }
 

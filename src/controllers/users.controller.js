@@ -1,25 +1,27 @@
 const UserService = require('../services/userService.js')
 const userService = UserService.getInstance()
+const passport = require('passport')
 
 const signup = async (req, res) => {
     try {
         await userService.signup(req, res)
     } catch (error) {
-        console.error(`El error es: ${error}`)
+        res.status(400).json({ error: `${error}` })
     }
 }
 
 // Logueando usuario
-const signin = () => {
-    userService.signin()
-}
+const signin = passport.authenticate('local', {
+    successRedirect: "/api/home",
+    failureRedirect: "/api/error-login",
+})
 
 // deslogueando usuario
 const logout = async (req, res, next) => {
     try {
         await userService.logout(req, res, next)
     } catch (error) {
-        console.error(`El error es: ${error}`)
+        res.status(400).json({ error: `${error}` })
     }
 }
 
@@ -28,7 +30,7 @@ const auth = (req, res, next) => {
     try {
         userService.auth(req, res, next)
     } catch (error) {
-        console.error(`El error es: ${error}`)
+        res.status(400).json({ error: `${error}` })
     }
 }
 
@@ -37,7 +39,7 @@ const getUsers = async (req, res) => {
     try {
         await userService.getUsers(req, res)
     } catch (error) {
-        console.error(`El error es: ${error}`)
+        res.status(400).json({ error: `${error}` })
     }
 }
 
@@ -46,7 +48,7 @@ const home = async (req, res) => {
     try {
         await userService.home(req, res)
     } catch (error) {
-        console.error(`El error es: ${error}`)
+        res.status(400).json({ error: `${error}` })
     }
 }
 

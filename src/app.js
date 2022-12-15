@@ -1,13 +1,11 @@
 const express = require('express')
-const session = require('express-session')
-const MongoStore = require('connect-mongo')
-const { dbsConfig } = require('./config/dbsConnect.js')
 const passport = require('passport')
 const path = require('path')
 const routerSession = require('./routes/session.routes.js')
 const cartRouter = require('./routes/cart.routes.js')
 const productsRouter = require('./routes/products.routes.js')
 const userRouter = require('./routes/user.routes.js')
+const { session } = require('./config/session.js')
 
 /*+++++++++++++++++++++++++
 + CONFIGURACION DE LA APP +
@@ -29,19 +27,7 @@ app.set('view engine', '.ejs')
 // Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl: dbsConfig.mongodbAtlas.uri,
-        mongoOptions: dbsConfig.mongodbAtlas.options
-    }),
-    secret: 'mongoSecret',
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-        maxAge: 600000
-    }
-}))
+app.use(session)
 app.use(passport.initialize())
 app.use(passport.session())
 
