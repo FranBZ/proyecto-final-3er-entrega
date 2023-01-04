@@ -2,7 +2,7 @@ const MongoConteiner = require("../database/mongo.js")
 const { Cart } = require('../models/Cart.js')
 const { Compras } = require('../models/Compras.js')
 const ProductService = require('./productService.js')
-const { userInfo } = require("../controllers/users.controller.js")
+const { getUsers } = require("../controllers/users.controller.js")
 const { enviarMensajeCliente, enviarMensajeAdmin } = require("../utils/avisoCompraWSP.js")
 const { enviarMail } = require("../utils/avisoCompraEmail.js")
 
@@ -62,7 +62,7 @@ class CartService extends MongoConteiner {
                 res.status(400).json({ error: 'Es necesario un _id' })
             } else {
                 await super.deleteById(id)
-                res.status(200).json({ error: 'Carrito borrado con exito' })
+                res.status(200).json({ mesagge: 'Carrito borrado con exito' })
             }
         } catch (error) {
             res.status(400).json({ error: `${error}` })
@@ -123,22 +123,23 @@ class CartService extends MongoConteiner {
     }
 
     async buyCart(req, res) {
-        const { id } = req.params
-        if (id) {
+        let { idCart } = req.params
+        if (idCart) {
             try {
-                const cart = await super.getById(id)
-                const usuario = await userInfo(cart[0].userID)
+                const cart = await super.getById(idCart)
+                req.params.id = cart[0].userID
+                const usuario = await getUsers(req, res)
                 const compra = {
-                    products: cart[0].products, 
+                    products: cart[0].products,
                     userID: cart[0].userID
                 }
                 const compraGuardada = await Compras.create(compra)
-                await enviarMensajeAdmin(cart[0].products, usuario)
-                await enviarMail(cart[0].products, usuario)
-                await enviarMensajeCliente(usuario)
+                await enviarMensajeAdmin(cart[0].products, usuario[0])
+                await enviarMail(cart[0].products, usuario[0])
+                await enviarMensajeCliente(usuario[0])
                 res.status(200).json({ message: 'carrito comprado - mensajes enviados' })
             } catch (error) {
-                res.status(400).json({ error: 'no se pudo enviar confirmacion de compra' })
+                res.status(400).json({ error: `no se pudo enviar confirmacion de compra ${error}` })
             }
         } else {
             res.status(400).json({ error: 'debe especificar un id valido' })

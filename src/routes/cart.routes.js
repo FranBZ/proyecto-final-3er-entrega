@@ -31,6 +31,6 @@ cartRouter.delete('/:id_cart/productos/:id_prod', deleteProductFromCartByID)
 cartRouter.get('/:id?', getCarts)
 
 //7 POST '/comprar/:id' - Me permite comprar el carrito por su id y guardar la compra en la base de datos
-cartRouter.post('/comprar/:id', byCartByID)
+cartRouter.post('/comprar/:idCart', byCartByID)
 
 module.exports = cartRouter

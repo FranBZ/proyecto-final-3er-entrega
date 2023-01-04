@@ -253,7 +253,7 @@ class UserService extends MongoConteiner {
 
     static instance
 
-    constructor () {
+    constructor() {
         super(User)
     }
 
@@ -265,39 +265,34 @@ class UserService extends MongoConteiner {
         return UserService.instance;
     }
 
-    async signup  (req, res) { // registrando usuario
-        
+    async signup(req, res) { // registrando usuario
+
         const { email, password, nombre, edad, direccion, prefijo, numero, pathFoto } = req.body
-        
+
         try {
             if (!email && !password && !nombre && !edad && !direccion && !numero && !pathFoto && !prefijo) {
                 borrarImagenUsuario()
                 logger.warn(`Error al registrarse`)
                 return res.redirect("/api/error-registro")
             }
-            
+
             // Comprobando si contiene prefijo
             if (!prefijos.includes(prefijo)) {
                 borrarImagenUsuario()
                 logger.warn(`Error al registrarse`)
                 return res.redirect("/api/error-registro")
             }
-        
+
             // Comprobando que no existen el mail
             const users = await super.getAll()
-            let userFound = false
-            for (let user = 0; user < users.length; user++) {
-                if (users[user.email] == email) {
-                    userFound = true
-                    break
-                }
-            }
+            let userFound = users.find(user => user.email == email)
+
             if (userFound) {
                 borrarImagenUsuario()
                 logger.error(`Error al registrarse`)
                 return res.redirect("/api/error-registro")
             }
-        
+
             const numeroTel = prefijo + numero
 
             // Guardando el usuario
@@ -305,17 +300,17 @@ class UserService extends MongoConteiner {
             newUser.password = await newUser.encryptPassword(password)
             logger.info('Usuario nuevo registrado')
             await super.save(newUser)
-        
+
             return res.redirect("/api/login")
-            
+
         } catch (error) {
             res.status(400).json({ error: `${error}` })
         }
 
     }
-    
+
     // deslogueando usuario
-    async logout (req, res, next) {
+    async logout(req, res, next) {
         let idSession = await req.session.passport.user
         let userInfo = await super.getById(idSession)
         let nombre = userInfo[0].nombre
@@ -324,9 +319,9 @@ class UserService extends MongoConteiner {
             return res.render("saludo", { nombre })
         })
     }
-    
+
     // comprobando autenticaicon
-    auth (req, res, next) {
+    auth(req, res, next) {
         if (req.isAuthenticated()) {
             logger.info("Usuario que consulta esta ruta: ", req.session.passport.user)
             return next()
@@ -337,30 +332,30 @@ class UserService extends MongoConteiner {
     }
 
     // Funcion para obtener todos los usuarios
-    getUsers = async (req, res) => {
+    async getUsers(req, res) {
         const { id } = req.params
         if (id) {
             try {
                 const user = await await super.getById(id)
-                res.status(200).send(user)
+                return user
             } catch (error) {
                 res.status(400).json({ message: `usuario con id no encontrado ${id}` })
             }
         } else {
             try {
                 const users = await super.getAll()
-                res.status(200).send(users)
+                return users
             } catch (error) {
                 res.status(400).json({ message: `error al listar usuarios` })
             }
         }
     }
-    
+
     // Redirigir a home
-    async home (req, res) {
+    async home(req, res) {
         let idSession = await req.session.passport.user
         let user = await super.getById(idSession)
-        res.render('home', { user : user[0] })
+        res.render('home', { user: user[0] })
     }
 }
 

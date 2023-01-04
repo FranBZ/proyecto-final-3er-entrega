@@ -11,16 +11,15 @@ const enviarMail = async (pedido, usuario) => {
         }
     })
 
-    body = ''
-    for (let i = 0; i < pedido.length; i++) {
-        body += `   <tr>
-                        <td> ${pedido[i].name} </td>
-                        <td> ${pedido[i].description} </td>
-                        <td> ${pedido[i].price} </td>
+    let body = pedido.reduce((acu, ped) => {
+        acu += `   <tr>
+                        <td> ${ped.name} </td>
+                        <td> ${ped.description} </td>
+                        <td> ${ped.price} </td>
                     </tr>`
-        
-    }
-    
+        return acu
+    }, '')
+
     const mailOptions = {
         from: `Nodemailer - ${process.env.TEST_MAIL}`,
         to: process.env.TEST_MAIL,

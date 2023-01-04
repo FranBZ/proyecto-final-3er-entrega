@@ -11,7 +11,7 @@ const getProductById = async (req, res) => {  // Esta funcion devuelve un produc
 
 const saveProduct = async (req, res) => {        // Guarda un prodcuto nuevo
     try {
-        await product.saveProduct(req, res)                                                              // Se lo pasamos al contendor
+        await product.saveProduct(req, res)
     } catch (error) {
         res.status(400).json({ error: `${error}` })
     }

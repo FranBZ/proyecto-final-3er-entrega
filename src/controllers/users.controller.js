@@ -37,7 +37,8 @@ const auth = (req, res, next) => {
 // Funcion para obtener todos los usuarios
 const getUsers = async (req, res) => {
     try {
-        await userService.getUsers(req, res)
+        const users = await userService.getUsers(req, res)
+        return users
     } catch (error) {
         res.status(400).json({ error: `${error}` })
     }
