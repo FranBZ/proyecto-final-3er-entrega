@@ -336,15 +336,15 @@ class UserService extends MongoConteiner {
         const { id } = req.params
         if (id) {
             try {
-                const user = await await super.getById(id)
-                return user
+                const user = await super.getById(id)
+                res.status(200).send(user)
             } catch (error) {
                 res.status(400).json({ message: `usuario con id no encontrado ${id}` })
             }
         } else {
             try {
                 const users = await super.getAll()
-                return users
+                res.status(200).send(users)                
             } catch (error) {
                 res.status(400).json({ message: `error al listar usuarios` })
             }

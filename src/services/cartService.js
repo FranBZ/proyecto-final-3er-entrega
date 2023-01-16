@@ -2,9 +2,9 @@ const MongoConteiner = require("../database/mongo.js")
 const { Cart } = require('../models/Cart.js')
 const { Compras } = require('../models/Compras.js')
 const ProductService = require('./productService.js')
-const { getUsers } = require("../controllers/users.controller.js")
 const { enviarMensajeCliente, enviarMensajeAdmin } = require("../utils/avisoCompraWSP.js")
 const { enviarMail } = require("../utils/avisoCompraEmail.js")
+const { User } = require('../models/User.js')
 
 const prodCollection = ProductService.getInstance()
 
@@ -128,7 +128,7 @@ class CartService extends MongoConteiner {
             try {
                 const cart = await super.getById(idCart)
                 req.params.id = cart[0].userID
-                const usuario = await getUsers(req, res)
+                const usuario = await User.findOne({'_id': req.session.passport.user})
                 const compra = {
                     products: cart[0].products,
                     userID: cart[0].userID
